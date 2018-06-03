@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta name="theme-color" content="#222">
+
+
+    <link rel="stylesheet" media="all" href="http://lion1ou.win/lib/Han/dist/han.min.css?v=3.3">
+
+
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+
+    <link href="http://lion1ou.win/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+          rel="stylesheet" type="text/css">
+
+
+    <link href="http://lion1ou.win/lib/font-awesomehttp://lion1ou.win/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css"/>
+
+    <link href="http://lion1ou.win/css/main.css?v=5.1.4" rel="stylesheet" type="text/css"/>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="http://lion1ou.win/images/apple-touch-icon.png?v=5.1.4">
+
+
+    <link rel="icon" type="image/png" sizes="32x32" href="http://lion1ou.win/images/favicon-32x32.png?v=5.1.4">
+
+
+    <link rel="icon" type="image/png" sizes="16x16" href="http://lion1ou.win/images/favicon-16x16.png?v=5.1.4">
+
+
+    <link rel="mask-icon" href="http://lion1ou.win/images/safari_pinned_tab.svg?v=5.1.4" color="#222">
+
+
+    <link rel="manifest" href="http://lion1ou.win/images/site.webmanifest">
+
+
+    <meta name="msapplication-config" content="http://lion1ou.win/images/browserconfig.xml"/>
+
+
+    <meta name="keywords" content="JWT,"/>
+
+
+    <meta name="description"
+          content="在前后端分离开发时为什么需要用户认证呢？原因是由于HTTP协定是不储存状态的(stateless)，这意味着当我们透过帐号密码验证一个使用者时，当下一个request请求时它就把刚刚的资料忘了。于是我们的程序就不知道谁是谁，就要再验证一次。所以为了保证系统安全，我们就需要验证用户否处于登录状态。">
+    <meta name="keywords" content="JWT">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="前后端分离之JWT用户认证">
+    <meta property="og:url" content="http://lion1ou.win/2017/01/18/index.html">
+    <meta property="og:site_name" content="lion1ou.win">
+    <meta property="og:description"
+          content="在前后端分离开发时为什么需要用户认证呢？原因是由于HTTP协定是不储存状态的(stateless)，这意味着当我们透过帐号密码验证一个使用者时，当下一个request请求时它就把刚刚的资料忘了。于是我们的程序就不知道谁是谁，就要再验证一次。所以为了保证系统安全，我们就需要验证用户否处于登录状态。">
+    <meta property="og:locale" content="zh-Hans">
+    <meta property="og:image" content="https://ww4.sinaimg.cn/large/006tNc79gy1fbv54tfilmj31120b2wl9.jpg">
+    <meta property="og:image" content="https://ww3.sinaimg.cn/large/006tNc79gy1fbv63pzqocj30pj0h8t9m.jpg">
+    <meta property="og:updated_time" content="2018-02-06T06:16:01.000Z">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="前后端分离之JWT用户认证">
+    <meta name="twitter:description"
+          content="在前后端分离开发时为什么需要用户认证呢？原因是由于HTTP协定是不储存状态的(stateless)，这意味着当我们透过帐号密码验证一个使用者时，当下一个request请求时它就把刚刚的资料忘了。于是我们的程序就不知道谁是谁，就要再验证一次。所以为了保证系统安全，我们就需要验证用户否处于登录状态。">
+    <meta name="twitter:image" content="https://ww4.sinaimg.cn/large/006tNc79gy1fbv54tfilmj31120b2wl9.jpg">
+
+
+    <script type="text/javascript" id="hexo.configurations">
+        var NexT = window.NexT || {};
+        var CONFIG = {
+            root: '/',
+            scheme: 'Gemini',
+            version: '5.1.4',
+            sidebar: {
+                "position": "left",
+                "display": "always",
+                "offset": 12,
+                "b2t": true,
+                "scrollpercent": true,
+                "onmobile": false
+            },
+            fancybox: true,
+            tabs: true,
+            motion: {
+                "enable": true,
+                "async": false,
+                "transition": {
+                    "post_block": "fadeIn",
+                    "post_header": "slideDownIn",
+                    "post_body": "slideDownIn",
+                    "coll_header": "slideLeftIn",
+                    "sidebar": "slideUpIn"
+                }
+            },
+            duoshuo: {
+                userId: '0',
+                author: '博主'
+            },
+            algolia: {
+                applicationID: '',
+                apiKey: '',
+                indexName: '',
+                hits: {"per_page": 10},
+                labels: {
+                    "input_placeholder": "Search for Posts",
+                    "hits_empty": "We didn't find any results for the search: ${query}",
+                    "hits_stats": "${hits} results found in ${time} ms"
+                }
+            }
+        };
+    </script>
+
+
+    <link rel="canonical" href="http://lion1ou.win/2017/01/18/"/>
+
+
+    <title>前后端分离之JWT用户认证 | lion1ou.win</title>
+
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?670319318804add6c99a71df6601f645";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+
+<div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner">
+            <div class="site-brand-wrapper">
+                <div class="site-meta ">
+
+
+                    <div class="custom-logo-site-title">
+                        <a href="/" class="brand" rel="start">
+                            <span class="logo-line-before"><i></i></span>
+                            <span class="site-title">lion1ou.win</span>
+                            <span class="logo-line-after"><i></i></span>
+                        </a>
+                    </div>
+
+                    <h1 class="site-subtitle" itemprop="description"></h1>
+
+                </div>
+
+                <div class="site-nav-toggle">
+                    <button>
+                        <span class="btn-bar"></span>
+                        <span class="btn-bar"></span>
+                        <span class="btn-bar"></span>
+                    </button>
+                </div>
+            </div>
+
+            <nav class="site-nav">
+
+
+                <ul id="menu" class="menu">
+
+
+                    <li class="menu-item menu-item-home">
+                        <a href="/" rel="section">
+
+                            <i class="menu-item-icon fa fa-fw fa-home"></i> <br/>
+
+                            首页
+                        </a>
+                    </li>
+
+
+                    <li class="menu-item menu-item-tags">
+                        <a href="/tags/" rel="section">
+
+                            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>
+
+                            标签
+                        </a>
+                    </li>
+
+
+                    <li class="menu-item menu-item-archives">
+                        <a href="/archives/" rel="section">
+
+                            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>
+
+                            归档
+                        </a>
+                    </li>
+
+
+                    <li class="menu-item menu-item-categories">
+                        <a href="/categories/" rel="section">
+
+                            <i class="menu-item-icon fa fa-fw fa-th"></i> <br/>
+
+                            分类
+                        </a>
+                    </li>
+
+
+                    <li class="menu-item menu-item-about">
+                        <a href="/about/" rel="section">
+
+                            <i class="menu-item-icon fa fa-fw fa-user"></i> <br/>
+
+                            关于
+                        </a>
+                    </li>
+
+
+                    <li class="menu-item menu-item-search">
+
+                        <a href="javascript:;" class="popup-trigger">
+
+
+                            <i class="menu-item-icon fa fa-search fa-fw"></i> <br/>
+
+                            搜索
+                        </a>
+                    </li>
+
+                </ul>
+
+
+                <div class="site-search">
+
+                    <div class="popup search-popup local-search-popup">
+                        <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+                            <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+                            <div class="local-search-input-wrapper">
+                                <input autocomplete="off"
+                                       placeholder="搜索..." spellcheck="false"
+                                       type="text" id="local-search-input">
+                            </div>
+                        </div>
+                        <div id="local-search-result"></div>
+                    </div>
+
+
+                </div>
+
+            </nav>
+
+
+        </div>
+    </header>
+
+    <main id="main" class="main">
+        <div class="main-inner">
+            <div class="content-wrap">
+                <div id="content" class="content">
+
+
+                    <div id="posts" class="posts-expand">
+
+
+                        <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+
+
+                            <div class="post-block">
+                                <link itemprop="mainEntityOfPage" href="http://lion1ou.win/2017/01/18/">
+
+                                <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lion1ou">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ww4.sinaimg.cn/large/72f96cbagw1f5r2v8ovbjj20ma0mawjr.jpg">
+    </span>
+
+                                <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lion1ou.win">
+    </span>
+
+
+                                <header class="post-header">
+
+
+                                    <h2 class="post-title" itemprop="name headline">前后端分离之JWT用户认证</h2>
+
+
+                                    <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-18T19:41:37+08:00">
+                2017-01-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+
+                                        <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Other/" itemprop="url" rel="index">
+                    <span itemprop="name">Other</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+
+
+                                        <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/01/18/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2017/01/18/"
+                        itemprop="commentsCount"></span>
+                </a>
+              </span>
+
+
+                                        <span id="/2017/01/18/" class="leancloud_visitors"
+                                              data-flag-title="前后端分离之JWT用户认证">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+
+
+                                        <span class="post-meta-divider">|</span>
+                                        <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+
+
+                                    </div>
+                                </header>
+
+
+                                <div class="post-body han-init-context" itemprop="articleBody">
+
+
+                                    <p>
+                                        在前后端分离开发时为什么需要用户认证呢？原因是由于HTTP协定是不储存状态的(stateless)，这意味着当我们透过帐号密码验证一个使用者时，当下一个request请求时它就把刚刚的资料忘了。于是我们的程序就不知道谁是谁，就要再验证一次。所以为了保证系统安全，我们就需要验证用户否处于登录状态。</p>
+                                    <a id="more"></a>
+                                    <h3 id="传统方式"><a href="#传统方式" class="headerlink" title="传统方式"></a>传统方式</h3>
+                                    <p>前后端分离通过Restful
+                                        API进行数据交互时，如何验证用户的登录信息及权限。在原来的项目中，使用的是最传统也是最简单的方式，前端登录，后端根据用户信息生成一个<code>token</code>，并保存这个
+                                        <code>token</code> 和对应的用户id到数据库或Session中，接着把 <code>token</code> 传给用户，存入浏览器
+                                        cookie，之后浏览器请求带上这个cookie，后端根据这个cookie值来查询用户，验证是否过期。</p>
+                                    <p>但这样做问题就很多，如果我们的页面出现了 XSS 漏洞，由于 cookie 可以被 JavaScript 读取，XSS 漏洞会导致用户 token
+                                        泄露，而作为后端识别用户的标识，cookie 的泄露意味着用户信息不再安全。尽管我们通过转义输出内容，使用 CDN 等可以尽量避免 XSS
+                                        注入，但谁也不能保证在大型的项目中不会出现这个问题。</p>
+                                    <p>在设置 cookie 的时候，其实你还可以设置 httpOnly 以及 secure 项。设置 httpOnly 后 cookie 将不能被 JS
+                                        读取，浏览器会自动的把它加在请求的 header 当中，设置 secure 的话，cookie 就只允许通过 HTTPS 传输。secure
+                                        选项可以过滤掉一些使用 HTTP 协议的 XSS 注入，但并不能完全阻止。</p>
+                                    <p>httpOnly 选项使得 JS 不能读取到 cookie，那么 XSS 注入的问题也基本不用担心了。但设置 httpOnly 就带来了另一个问题，就是很容易的被
+                                        XSRF，即跨站请求伪造。当你浏览器开着这个页面的时候，另一个页面可以很容易的跨站请求这个页面的内容。因为 cookie 默认被发了出去。</p>
+                                    <p>另外，如果将验证信息保存在数据库中，后端每次都需要根据<code>token</code>查出用户<code>id</code>，这就增加了数据库的查询和存储开销。若把验证信息保存在session中，有加大了服务器端的存储压力。那我们可不可以不要服务器去查询呢？如果我们生成<code>token</code>遵循一定的规律，比如我们使用对称加密算法来加密用户<code>id</code>形成<code>token</code>，那么服务端以后其实只要解密该<code>token</code>就可以知道用户的<code>id</code>是什么了。不过呢，我只是举个例子而已，要是真这么做，只要你的对称加密算法泄露了，其他人可以通过这种加密方式进行伪造<code>token</code>，那么所有用户信息都不再安全了。恩，那用非对称加密算法来做呢，其实现在有个规范就是这样做的，就是我们接下来要介绍的
+                                        JWT。</p>
+                                    <h3 id="Json-Web-Token（JWT）"><a href="#Json-Web-Token（JWT）" class="headerlink"
+                                                                    title="Json Web Token（JWT）"></a>Json Web Token（JWT）
+                                    </h3>
+                                    <p>JWT 是一个开放标准(RFC 7519)，它定义了一种用于简洁，自包含的用于通信双方之间以 JSON 对象的形式安全传递信息的方法。JWT 可以使用 HMAC
+                                        算法或者是 RSA 的公钥密钥对进行签名。它具备两个特点：</p>
+                                    <ul>
+                                        <li><p>简洁(Compact)</p>
+                                            <p> 可以通过URL, POST 参数或者在 HTTP header 发送，因为数据量小，传输速度快</p>
+                                        </li>
+                                        <li><p>自包含(Self-contained)</p>
+                                            <p> 负载中包含了所有用户所需要的信息，避免了多次查询数据库</p>
+                                        </li>
+                                    </ul>
+                                    <h4 id="JWT-组成"><a href="#JWT-组成" class="headerlink" title="JWT 组成"></a>JWT 组成</h4>
+                                    <p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fbv54tfilmj31120b2wl9.jpg"
+                                            alt=""></p>
+                                    <ul>
+                                        <li>Header 头部</li>
+                                    </ul>
+                                    <p>头部包含了两部分，token 类型和采用的加密算法</p>
+                                    <figure class="highlight json">
+                                        <table>
+                                            <tr>
+                                                <td class="code">
+                                                    <pre><span class="line">&#123;</span><br><span class="line">  <span
+                                                            class="attr">"alg"</span>: <span
+                                                            class="string">"HS256"</span>,</span><br><span class="line">  <span
+                                                            class="attr">"typ"</span>: <span class="string">"JWT"</span></span><br><span
+                                                            class="line">&#125;</span><br></pre>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </figure>
+                                    <p>它会使用 Base64 编码组成 JWT 结构的第一部分,如果你使用Node.js，可以用Node.js的包base64url来得到这个字符串。</p>
+                                    <blockquote>
+                                        <p>Base64是一种编码，也就是说，它是可以被翻译回原来的样子来的。它并不是一种加密过程。</p>
+                                    </blockquote>
+                                    <ul>
+                                        <li>Payload 负载</li>
+                                    </ul>
+                                    <p>这部分就是我们存放信息的地方了，你可以把用户 ID 等信息放在这里，JWT 规范里面对这部分有进行了比较详细的介绍，常用的由
+                                        iss（签发者），exp（过期时间），sub（面向的用户），aud（接收方），iat（签发时间）。</p>
+                                    <figure class="highlight json">
+                                        <table>
+                                            <tr>
+                                                <td class="code">
+                                                    <pre><span class="line">&#123;</span><br><span
+                                                            class="line">    <span class="attr">"iss"</span>: <span
+                                                            class="string">"lion1ou JWT"</span>,</span><br><span
+                                                            class="line">    <span class="attr">"iat"</span>: <span
+                                                            class="number">1441593502</span>,</span><br><span
+                                                            class="line">    <span class="attr">"exp"</span>: <span
+                                                            class="number">1441594722</span>,</span><br><span
+                                                            class="line">    <span class="attr">"aud"</span>: <span
+                                                            class="string">"www.example.com"</span>,</span><br><span
+                                                            class="line">    <span class="attr">"sub"</span>: <span
+                                                            class="string">"lion1ou@163.com"</span></span><br><span
+                                                            class="line">&#125;</span><br></pre>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </figure>
+                                    <p>同样的，它会使用 Base64 编码组成 JWT 结构的第二部分</p>
+                                    <ul>
+                                        <li>Signature 签名</li>
+                                    </ul>
+                                    <p>前面两部分都是使用 Base64 进行编码的，即前端可以解开知道里面的信息。Signature 需要使用编码后的 header 和 payload
+                                        以及我们提供的一个密钥，然后使用 header 中指定的签名算法（HS256）进行签名。签名的作用是保证 JWT 没有被篡改过。</p>
+                                    <p>三个部分通过<code>.</code>连接在一起就是我们的 JWT 了，它可能长这个样子，长度貌似和你的加密算法和私钥有关系。</p>
+                                    <p><code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</code>.<code>eyJpZCI6IjU3ZmVmMTY0ZTU0YWY2NGZmYzUzZGJkNSIsInhzcmYiOiI0ZWE1YzUwOGE2NTY2ZTc2MjQwNTQzZjhmZWIwNmZkNDU3Nzc3YmUzOTU0OWM0MDE2NDM2YWZkYTY1ZDIzMzBlIiwiaWF0IjoxNDc2NDI3OTMzfQ</code>.<code>PA3QjeyZSUh7H0GfE0vJaKW4LjKJuC3dVLQiY4hii8s</code>
+                                    </p>
+                                    <p>其实到这一步可能就有人会想了，HTTP 请求总会带上 token，这样这个 token 传来传去占用不必要的带宽啊。如果你这么想了，那你可以去了解下
+                                        HTTP2，HTTP2 对头部进行了压缩，相信也解决了这个问题。</p>
+                                    <ul>
+                                        <li>签名的目的</li>
+                                    </ul>
+                                    <p>
+                                        最后一步签名的过程，实际上是对头部以及负载内容进行签名，防止内容被窜改。如果有人对头部以及负载的内容解码之后进行修改，再进行编码，最后加上之前的签名组合形成新的JWT的话，那么服务器端会判断出新的头部和负载形成的签名和JWT附带上的签名是不一样的。如果要对新的头部和负载进行签名，在不知道服务器加密时用的密钥的话，得出来的签名也是不一样的。</p>
+                                    <ul>
+                                        <li>信息暴露</li>
+                                    </ul>
+                                    <p>在这里大家一定会问一个问题：Base64是一种编码，是可逆的，那么我的信息不就被暴露了吗？</p>
+                                    <p>是的。所以，在JWT中，不应该在负载里面加入任何敏感的数据。在上面的例子中，我们传输的是用户的User
+                                        ID。这个值实际上不是什么敏感内容，一般情况下被知道也是安全的。但是像密码这样的内容就不能被放在JWT中了。如果将用户的密码放在了JWT中，那么怀有恶意的第三方通过Base64解码就能很快地知道你的密码了。</p>
+                                    <p>因此JWT适合用于向Web应用传递一些非敏感信息。JWT还经常用于设计用户认证和授权系统，甚至实现Web应用的单点登录。</p>
+                                    <h3 id="JWT-使用"><a href="#JWT-使用" class="headerlink" title="JWT 使用"></a>JWT 使用</h3>
+                                    <p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fbv63pzqocj30pj0h8t9m.jpg"
+                                            alt=""></p>
+                                    <ol>
+                                        <li>首先，前端通过Web表单将自己的用户名和密码发送到后端的接口。这一过程一般是一个HTTP
+                                            POST请求。建议的方式是通过SSL加密的传输（https协议），从而避免敏感信息被嗅探。
+                                        </li>
+                                        <li>后端核对用户名和密码成功后，将用户的id等其他信息作为JWT
+                                            Payload（负载），将其与头部分别进行Base64编码拼接后签名，形成一个JWT。形成的JWT就是一个形同lll.zzz.xxx的字符串。
+                                        </li>
+                                        <li>
+                                            后端将JWT字符串作为登录成功的返回结果返回给前端。前端可以将返回的结果保存在localStorage或sessionStorage上，退出登录时前端删除保存的JWT即可。
+                                        </li>
+                                        <li>前端在每次请求时将JWT放入HTTP Header中的Authorization位。(解决XSS和XSRF问题)</li>
+                                        <li>后端检查是否存在，如存在验证JWT的有效性。例如，检查签名是否正确；检查Token是否过期；检查Token的接收方是否是自己（可选）。</li>
+                                        <li>验证通过后后端使用JWT中包含的用户信息进行其他逻辑操作，返回相应结果。</li>
+                                    </ol>
+                                    <h3 id="和Session方式存储id的差异"><a href="#和Session方式存储id的差异" class="headerlink"
+                                                                  title="和Session方式存储id的差异"></a>和Session方式存储id的差异</h3>
+                                    <p>
+                                        Session方式存储用户id的最大弊病在于Session是存储在服务器端的，所以需要占用大量服务器内存，对于较大型应用而言可能还要保存许多的状态。一般而言，大型应用还需要借助一些KV数据库和一系列缓存机制来实现Session的存储。</p>
+                                    <p>
+                                        而JWT方式将用户状态分散到了客户端中，可以明显减轻服务端的内存压力。除了用户id之外，还可以存储其他的和用户相关的信息，例如该用户是否是管理员、用户所在的分组等。虽说JWT方式让服务器有一些计算压力（例如加密、编码和解码），但是这些压力相比磁盘存储而言可能就不算什么了。具体是否采用，需要在不同场景下用数据说话。</p>
+                                    <ul>
+                                        <li>单点登录</li>
+                                    </ul>
+                                    <p>
+                                        Session方式来存储用户id，一开始用户的Session只会存储在一台服务器上。对于有多个子域名的站点，每个子域名至少会对应一台不同的服务器，例如：<code>www.taobao.com</code>，<code>nv.taobao.com</code>，<code>nz.taobao.com</code>，<code>login.taobao.com</code>。所以如果要实现在<code>login.taobao.com</code>登录后，在其他的子域名下依然可以取到Session，这要求我们在多台服务器上同步Session。使用JWT的方式则没有这个问题的存在，因为用户的状态已经被传送到了客户端。
+                                    </p>
+                                    <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3>
+                                    <p>JWT的主要作用在于（一）可附带用户信息，后端直接通过JWT获取相关信息。（二）使用本地保存，通过HTTP
+                                        Header中的Authorization位提交验证。但其实关于JWT存放到哪里一直有很多讨论，有人说存放到本地存储，有人说存
+                                        cookie。个人偏向于放在本地存储，如果你有什么意见和看法欢迎提出。</p>
+                                    <p>参考：<a href="https://segmentfault.com/a/1190000005783306" target="_blank"
+                                             rel="external">1</a> <a
+                                            href="http://blog.rainy.im/2015/06/10/react-jwt-pretty-good-practice/"
+                                            target="_blank" rel="external">2</a> <a
+                                            href="https://ruiming.me/archives/41" target="_blank" rel="external">3</a>
+                                    </p>
+                                    <p><strong>转载请标注原文地址</strong></p>
+
+
+                                </div>
+
+
+                                <div>
+                                    <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+                                        <div>请我喝杯咖啡呗~</div>
+                                        <button id="rewardButton" disable="enable"
+                                                onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+                                            <span>打赏</span>
+                                        </button>
+                                        <div id="QR" style="display: none;">
+
+
+                                            <div id="wechat" style="display: inline-block">
+                                                <img id="wechat_qr"
+                                                     src="http://ww4.sinaimg.cn/large/72f96cbagw1f69n74l1i3j20740743zc.jpg"
+                                                     alt="lion1ou 微信支付"/>
+                                                <p>微信支付</p>
+                                            </div>
+
+
+                                            <div id="alipay" style="display: inline-block">
+                                                <img id="alipay_qr"
+                                                     src="http://ww4.sinaimg.cn/large/72f96cbagw1f69n7n2h54j2074074750.jpg"
+                                                     alt="lion1ou 支付宝"/>
+                                                <p>支付宝</p>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <div>
+                                    <ul class="post-copyright">
+                                        <li class="post-copyright-author">
+                                            <strong>本文作者：</strong>
+                                            lion1ou
+                                        </li>
+                                        <li class="post-copyright-link">
+                                            <strong>本文链接：</strong>
+                                            <a href="http://lion1ou.win/2017/01/18/" title="前后端分离之JWT用户认证">http://lion1ou.win/2017/01/18/</a>
+                                        </li>
+                                        <li class="post-copyright-license">
+                                            <strong>版权声明： </strong>
+                                            本博客所有文章除特别声明外，均采用 <a
+                                                href="https://creativecommons.org/licenses/by-nc-sa/3.0/"
+                                                rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a>
+                                            许可协议。转载请注明出处！
+                                        </li>
+                                    </ul>
+
+                                </div>
+
+
+                                <footer class="post-footer">
+
+                                    <div class="post-tags">
+
+                                        <a href="/tags/JWT/" rel="tag"># JWT</a>
+
+                                    </div>
+
+
+                                    <div class="post-widgets">
+
+
+                                        <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="post-nav">
+                                        <div class="post-nav-next post-nav-item">
+
+                                            <a href="/2017/01/17/" rel="next" title="前后端分离之跨域问题">
+                                                <i class="fa fa-chevron-left"></i> 前后端分离之跨域问题
+                                            </a>
+
+                                        </div>
+
+                                        <span class="post-nav-divider"></span>
+
+                                        <div class="post-nav-prev post-nav-item">
+
+                                            <a href="/2017/02/01/" rel="prev" title="JavaScript去重算法">
+                                                JavaScript去重算法 <i class="fa fa-chevron-right"></i>
+                                            </a>
+
+                                        </div>
+                                    </div>
+
+
+                                </footer>
+                            </div>
+
+
+                        </article>
+
+
+                        <div class="post-spread">
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+                <div class="comments" id="comments">
+
+                    <div id="gitment-container"></div>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="sidebar-toggle">
+                <div class="sidebar-toggle-line-wrap">
+                    <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+                    <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+                    <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+                </div>
+            </div>
+
+            <aside id="sidebar" class="sidebar">
+
+                <div class="sidebar-inner">
+
+
+                    <ul class="sidebar-nav motion-element">
+                        <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+                            文章目录
+                        </li>
+                        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+                            站点概览
+                        </li>
+                    </ul>
+
+
+                    <section class="site-overview-wrap sidebar-panel">
+                        <div class="site-overview">
+                            <div class="site-author motion-element" itemprop="author" itemscope
+                                 itemtype="http://schema.org/Person">
+
+                                <img class="site-author-image" itemprop="image"
+                                     src="http://ww4.sinaimg.cn/large/72f96cbagw1f5r2v8ovbjj20ma0mawjr.jpg"
+                                     alt="lion1ou"/>
+
+                                <p class="site-author-name" itemprop="name">lion1ou</p>
+                                <p class="site-description motion-element" itemprop="description"></p>
+                            </div>
+
+                            <nav class="site-state motion-element">
+
+
+                                <div class="site-state-item site-state-posts">
+
+                                    <a href="/archives/">
+
+                                        <span class="site-state-item-count">99</span>
+                                        <span class="site-state-item-name">日志</span>
+                                    </a>
+                                </div>
+
+
+                                <div class="site-state-item site-state-categories">
+                                    <a href="/categories/index.html">
+                                        <span class="site-state-item-count">9</span>
+                                        <span class="site-state-item-name">分类</span>
+                                    </a>
+                                </div>
+
+
+                                <div class="site-state-item site-state-tags">
+                                    <a href="/tags/index.html">
+                                        <span class="site-state-item-count">32</span>
+                                        <span class="site-state-item-name">标签</span>
+                                    </a>
+                                </div>
+
+
+                            </nav>
+
+
+                            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/lion1ou" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+
+                                <span class="links-of-author-item">
+                    <a href="mailto:lion1ou@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+
+                                <span class="links-of-author-item">
+                    <a href="http://weibo.com/1923271877/profile?topnav=1&wvr=6&is_all=1" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i></a>
+                  </span>
+
+                                <span class="links-of-author-item">
+                    <a href="https://twitter.com/a418120186" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+
+                                <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/profile.php?id=100010975537330" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i></a>
+                  </span>
+
+                            </div>
+
+
+                            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+                                <div class="links-of-blogroll-title">
+                                    <i class="fa  fa-fw fa-link"></i>
+                                    Links
+                                </div>
+                                <ul class="links-of-blogroll-list">
+
+                                    <li class="links-of-blogroll-item">
+                                        <a href="http://www.fdshfccy.com" title="初韵茶苑" target="_blank">初韵茶苑</a>
+                                    </li>
+
+                                    <li class="links-of-blogroll-item">
+                                        <a href="http://chuangzaoshi.com/" title="创造狮" target="_blank">创造狮</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+
+
+                        </div>
+                    </section>
+
+
+                    <!--noindex-->
+                    <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+                        <div class="post-toc">
+
+
+                            <div class="post-toc-content">
+                                <ol class="nav">
+                                    <li class="nav-item nav-level-3"><a class="nav-link" href="#传统方式"><span
+                                            class="nav-text">传统方式</span></a></li>
+                                    <li class="nav-item nav-level-3"><a class="nav-link"
+                                                                        href="#Json-Web-Token（JWT）"><span
+                                            class="nav-text">Json Web Token（JWT）</span></a>
+                                        <ol class="nav-child">
+                                            <li class="nav-item nav-level-4"><a class="nav-link" href="#JWT-组成"><span
+                                                    class="nav-text">JWT 组成</span></a></li>
+                                        </ol>
+                                    </li>
+                                    <li class="nav-item nav-level-3"><a class="nav-link" href="#JWT-使用"><span
+                                            class="nav-text">JWT 使用</span></a></li>
+                                    <li class="nav-item nav-level-3"><a class="nav-link" href="#和Session方式存储id的差异"><span
+                                            class="nav-text">和Session方式存储id的差异</span></a></li>
+                                    <li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span
+                                            class="nav-text">总结</span></a></li>
+                                </ol>
+                            </div>
+
+
+                        </div>
+                    </section>
+                    <!--/noindex-->
+
+
+                    <div class="back-to-top">
+                        <i class="fa fa-arrow-up"></i>
+
+                        <span id="scrollpercent"><span>0</span>%</span>
+
+                    </div>
+
+
+                </div>
+            </aside>
+
+
+        </div>
+    </main>
+
+    <footer id="footer" class="footer">
+        <div class="footer-inner">
+            <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+                <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+                <span class="author" itemprop="copyrightHolder">lion1ou</span>
+
+
+            </div>
+
+
+            <div class="busuanzi-count">
+                <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+                <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+
+
+                <span class="site-pv">
+      <i class="fa fa-eye"></i> 访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+
+            </div>
+
+
+        </div>
+    </footer>
+
+
+    <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+    </div>
+
+
+</div>
+
+
+<script type="text/javascript">
+    if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+        window.Promise = null;
+    }
+</script>
+
+
+<script type="text/javascript" src="http://lion1ou.win/lib/jquery/index.js?v=2.1.3"></script>
+
+
+<script type="text/javascript" src="http://lion1ou.win/lib/fastclickhttp://lion1ou.win/lib/fastclick.min.js?v=1.0.6"></script>
+
+
+<script type="text/javascript" src="http://lion1ou.win/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+
+<script type="text/javascript" src="http://lion1ou.win/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+
+<script type="text/javascript" src="http://lion1ou.win/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+<script type="text/javascript" src="http://lion1ou.win/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+<script type="text/javascript" src="http://lion1ou.win/js/src/utils.js?v=5.1.4"></script>
+
+<script type="text/javascript" src="http://lion1ou.win/js/src/motion.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" src="http://lion1ou.win/js/src/affix.js?v=5.1.4"></script>
+
+<script type="text/javascript" src="http://lion1ou.win/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" src="http://lion1ou.win/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="http://lion1ou.win/js/src/post-details.js?v=5.1.4"></script>
+
+
+<script type="text/javascript" src="http://lion1ou.win/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+
+
+<link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+<script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+
+<!-- END LOCAL -->
+
+
+<style>
+    a.gitment-editor-footer-tip {
+        display: none;
+    }
+
+    .gitment-container.gitment-footer-container {
+        display: none;
+    }
+</style>
+
+
+<script type="text/javascript">
+    function renderGitment() {
+        var gitment = new Gitmint({
+            id: window.location.pathname,
+            owner: 'lion1ou',
+            repo: 'gitment-comments',
+
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+
+            oauth: {
+
+
+                client_secret: '1a37a785fc6876b2174eebbb5c7da59363e227ec',
+
+                client_id: '5cfdd2b3f61e1e1d2869'
+            }
+        });
+        gitment.render('gitment-container');
+    }
+
+
+    renderGitment();
+
+</script>
+
+
+<script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+        search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+        isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+        $('.popup').hide();
+        $('#local-search-input').val('');
+        $('.search-result-list').remove();
+        $('#no-result').remove();
+        $(".local-search-pop-overlay").remove();
+        $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+        $("body")
+            .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+            .css('overflow', 'hidden');
+        $('.search-popup-overlay').click(onPopupClose);
+        $('.popup').toggle();
+        var $localSearchInput = $('#local-search-input');
+        $localSearchInput.attr("autocapitalize", "none");
+        $localSearchInput.attr("autocorrect", "off");
+        $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+
+        // start loading animation
+        $("body")
+            .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+                '<div id="search-loading-icon">' +
+                '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+                '</div>' +
+                '</div>')
+            .css('overflow', 'hidden');
+        $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+        $.ajax({
+            url: path,
+            dataType: isXml ? "xml" : "json",
+            async: true,
+            success: function (res) {
+                // get the contents from search data
+                isfetched = true;
+                $('.popup').detach().appendTo('.header-inner');
+                var datas = isXml ? $("entry", res).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get() : res;
+                var input = document.getElementById(search_id);
+                var resultContent = document.getElementById(content_id);
+                var inputEventFunction = function () {
+                    var searchText = input.value.trim().toLowerCase();
+                    var keywords = searchText.split(/[\s\-]+/);
+                    if (keywords.length > 1) {
+                        keywords.push(searchText);
+                    }
+                    var resultItems = [];
+                    if (searchText.length > 0) {
+                        // perform local searching
+                        datas.forEach(function (data) {
+                            var isMatch = false;
+                            var hitCount = 0;
+                            var searchTextCount = 0;
+                            var title = data.title.trim();
+                            var titleInLowerCase = title.toLowerCase();
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            var contentInLowerCase = content.toLowerCase();
+                            var articleUrl = decodeURIComponent(data.url);
+                            var indexOfTitle = [];
+                            var indexOfContent = [];
+                            // only match articles with not empty titles
+                            if (title != '') {
+                                keywords.forEach(function (keyword) {
+                                    function getIndexByWord(word, text, caseSensitive) {
+                                        var wordLen = word.length;
+                                        if (wordLen === 0) {
+                                            return [];
+                                        }
+                                        var startPosition = 0, position = [], index = [];
+                                        if (!caseSensitive) {
+                                            text = text.toLowerCase();
+                                            word = word.toLowerCase();
+                                        }
+                                        while ((position = text.indexOf(word, startPosition)) > -1) {
+                                            index.push({position: position, word: word});
+                                            startPosition = position + wordLen;
+                                        }
+                                        return index;
+                                    }
+
+                                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                                });
+                                if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                                    isMatch = true;
+                                    hitCount = indexOfTitle.length + indexOfContent.length;
+                                }
+                            }
+
+                            // show search results
+
+                            if (isMatch) {
+                                // sort index by position of keyword
+
+                                [indexOfTitle, indexOfContent].forEach(function (index) {
+                                    index.sort(function (itemLeft, itemRight) {
+                                        if (itemRight.position !== itemLeft.position) {
+                                            return itemRight.position - itemLeft.position;
+                                        } else {
+                                            return itemLeft.word.length - itemRight.word.length;
+                                        }
+                                    });
+                                });
+
+                                // merge hits into slices
+
+                                function mergeIntoSlice(text, start, end, index) {
+                                    var item = index[index.length - 1];
+                                    var position = item.position;
+                                    var word = item.word;
+                                    var hits = [];
+                                    var searchTextCountInSlice = 0;
+                                    while (position + word.length <= end && index.length != 0) {
+                                        if (word === searchText) {
+                                            searchTextCountInSlice++;
+                                        }
+                                        hits.push({position: position, length: word.length});
+                                        var wordEnd = position + word.length;
+
+                                        // move to next position of hit
+
+                                        index.pop();
+                                        while (index.length != 0) {
+                                            item = index[index.length - 1];
+                                            position = item.position;
+                                            word = item.word;
+                                            if (wordEnd > position) {
+                                                index.pop();
+                                            } else {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    searchTextCount += searchTextCountInSlice;
+                                    return {
+                                        hits: hits,
+                                        start: start,
+                                        end: end,
+                                        searchTextCount: searchTextCountInSlice
+                                    };
+                                }
+
+                                var slicesOfTitle = [];
+                                if (indexOfTitle.length != 0) {
+                                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                                }
+
+                                var slicesOfContent = [];
+                                while (indexOfContent.length != 0) {
+                                    var item = indexOfContent[indexOfContent.length - 1];
+                                    var position = item.position;
+                                    var word = item.word;
+                                    // cut out 100 characters
+                                    var start = position - 20;
+                                    var end = position + 80;
+                                    if (start < 0) {
+                                        start = 0;
+                                    }
+                                    if (end < position + word.length) {
+                                        end = position + word.length;
+                                    }
+                                    if (end > content.length) {
+                                        end = content.length;
+                                    }
+                                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                                }
+
+                                // sort slices in content by search text's count and hits' count
+
+                                slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                                        return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                                        return sliceRight.hits.length - sliceLeft.hits.length;
+                                    } else {
+                                        return sliceLeft.start - sliceRight.start;
+                                    }
+                                });
+
+                                // select top N slices in content
+
+                                var upperBound = parseInt('1');
+                                if (upperBound >= 0) {
+                                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                                }
+
+                                // highlight title and content
+
+                                function highlightKeyword(text, slice) {
+                                    var result = '';
+                                    var prevEnd = slice.start;
+                                    slice.hits.forEach(function (hit) {
+                                        result += text.substring(prevEnd, hit.position);
+                                        var end = hit.position + hit.length;
+                                        result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                                        prevEnd = end;
+                                    });
+                                    result += text.substring(prevEnd, slice.end);
+                                    return result;
+                                }
+
+                                var resultItem = '';
+
+                                if (slicesOfTitle.length != 0) {
+                                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                                } else {
+                                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                                }
+
+                                slicesOfContent.forEach(function (slice) {
+                                    resultItem += "<a href='" + articleUrl + "'>" +
+                                        "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                                        "...</p>" + "</a>";
+                                });
+
+                                resultItem += "</li>";
+                                resultItems.push({
+                                    item: resultItem,
+                                    searchTextCount: searchTextCount,
+                                    hitCount: hitCount,
+                                    id: resultItems.length
+                                });
+                            }
+                        })
+                    }
+                    ;
+                    if (keywords.length === 1 && keywords[0] === "") {
+                        resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+                    } else if (resultItems.length === 0) {
+                        resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+                    } else {
+                        resultItems.sort(function (resultLeft, resultRight) {
+                            if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                                return resultRight.searchTextCount - resultLeft.searchTextCount;
+                            } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                                return resultRight.hitCount - resultLeft.hitCount;
+                            } else {
+                                return resultRight.id - resultLeft.id;
+                            }
+                        });
+                        var searchResultList = '<ul class=\"search-result-list\">';
+                        resultItems.forEach(function (result) {
+                            searchResultList += result.item;
+                        })
+                        searchResultList += "</ul>";
+                        resultContent.innerHTML = searchResultList;
+                    }
+                }
+
+                if ('auto' === 'auto') {
+                    input.addEventListener('input', inputEventFunction);
+                } else {
+                    $('.search-icon').click(inputEventFunction);
+                    input.addEventListener('keypress', function (event) {
+                        if (event.keyCode === 13) {
+                            inputEventFunction();
+                        }
+                    });
+                }
+
+                // remove loading animation
+                $(".local-search-pop-overlay").remove();
+                $('body').css('overflow', '');
+
+                proceedsearch();
+            }
+        });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function (e) {
+        e.stopPropagation();
+        if (isfetched === false) {
+            searchFunc(path, 'local-search-input', 'local-search-result');
+        } else {
+            proceedsearch();
+        }
+        ;
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function (e) {
+        e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+        var shouldDismissSearchPopup = event.which === 27 &&
+            $('.search-popup').is(':visible');
+        if (shouldDismissSearchPopup) {
+            onPopupClose();
+        }
+    });
+</script>
+
+
+<script src="https://cdn1.lncld.net/statichttp://lion1ou.win/js/av-core-mini-0.6.4.js"></script>
+<script>AV.initialize("9mfbTj6RC9Kv7EnYfKxQkUoo-gzGzoHsz", "cOjWenbJPVbvvsndlkiRSnU1");</script>
+<script>
+    function showTime(Counter) {
+        var query = new AV.Query(Counter);
+        var entries = [];
+        var $visitors = $(".leancloud_visitors");
+
+        $visitors.each(function () {
+            entries.push($(this).attr("id").trim());
+        });
+
+        query.containedIn('url', entries);
+        query.find()
+            .done(function (results) {
+                var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+                if (results.length === 0) {
+                    $visitors.find(COUNT_CONTAINER_REF).text(0);
+                    return;
+                }
+
+                for (var i = 0; i < results.length; i++) {
+                    var item = results[i];
+                    var url = item.get('url');
+                    var time = item.get('time');
+                    var element = document.getElementById(url);
+
+                    $(element).find(COUNT_CONTAINER_REF).text(time);
+                }
+                for (var i = 0; i < entries.length; i++) {
+                    var url = entries[i];
+                    var element = document.getElementById(url);
+                    var countSpan = $(element).find(COUNT_CONTAINER_REF);
+                    if (countSpan.text() == '') {
+                        countSpan.text(0);
+                    }
+                }
+            })
+            .fail(function (object, error) {
+                console.log("Error: " + error.code + " " + error.message);
+            });
+    }
+
+    function addCount(Counter) {
+        var $visitors = $(".leancloud_visitors");
+        var url = $visitors.attr('id').trim();
+        var title = $visitors.attr('data-flag-title').trim();
+        var query = new AV.Query(Counter);
+
+        query.equalTo("url", url);
+        query.find({
+            success: function (results) {
+                if (results.length > 0) {
+                    var counter = results[0];
+                    counter.fetchWhenSave(true);
+                    counter.increment("time");
+                    counter.save(null, {
+                        success: function (counter) {
+                            var $element = $(document.getElementById(url));
+                            $element.find('.leancloud-visitors-count').text(counter.get('time'));
+                        },
+                        error: function (counter, error) {
+                            console.log('Failed to save Visitor num, with error message: ' + error.message);
+                        }
+                    });
+                } else {
+                    var newcounter = new Counter();
+                    /* Set ACL */
+                    var acl = new AV.ACL();
+                    acl.setPublicReadAccess(true);
+                    acl.setPublicWriteAccess(true);
+                    newcounter.setACL(acl);
+                    /* End Set ACL */
+                    newcounter.set("title", title);
+                    newcounter.set("url", url);
+                    newcounter.set("time", 1);
+                    newcounter.save(null, {
+                        success: function (newcounter) {
+                            var $element = $(document.getElementById(url));
+                            $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+                        },
+                        error: function (newcounter, error) {
+                            console.log('Failed to create');
+                        }
+                    });
+                }
+            },
+            error: function (error) {
+                console.log('Error:' + error.code + " " + error.message);
+            }
+        });
+    }
+
+    $(function () {
+        var Counter = AV.Object.extend("Counter");
+        if ($('.leancloud_visitors').length == 1) {
+            addCount(Counter);
+        } else if ($('.post-title-link').length > 1) {
+            showTime(Counter);
+        }
+    });
+</script>
+
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+<link rel="stylesheet" href="http://lion1ou.win/lib/needsharebutton/needsharebutton.css">
+
+
+<script src="http://lion1ou.win/lib/needsharebutton/needsharebutton.js"></script>
+
+<script>
+
+    pbOptions = {};
+
+    pbOptions.iconStyle = "box";
+
+    pbOptions.boxForm = "horizontal";
+
+    pbOptions.position = "bottomCenter";
+
+    pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+
+    new needShareButton('#needsharebutton-postbottom', pbOptions);
+
+
+    flOptions = {};
+
+    flOptions.iconStyle = "box";
+
+    flOptions.boxForm = "horizontal";
+
+    flOptions.position = "middleRight";
+
+    flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+
+    new needShareButton('#needsharebutton-float', flOptions);
+
+</script>
+
+
+</body>
+</html>
