@@ -21,9 +21,9 @@ from app import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     # 首页
-    url(r'^$',views.BBS_list_view.as_view()),
+    url(r'^$',views.BBS_index_view.as_view()),
     # 列表
-    url(r'^bbs_list/$',views.BBS_list_view.as_view()),
+    url(r'^bbs_list/(?P<page>\d+)/$',views.BBS_list_view.as_view(),name='bbs_list'),
     # 增
     url(r'^bbs_add/$',views.BBS_add_view.as_view()),
     # 删
@@ -31,8 +31,8 @@ urlpatterns = [
     # 改
     url(r'^bbs_edit/(?P<bbs_id>\d+)/$',views.BBS_edit_view.as_view(),name='bbs_edit'),
     # 搜索
-    url(r'^bbs_search/$',views.BBS_search_view.as_view(),name='bbs_search'),
+    url(r'^bbs_search/(?P<page>\d+)/$',views.BBS_search_view.as_view(),name='bbs_search'),
     # 详情
-    url(r'^bbs_detail/$', views.BBS_detail_view.as_view()),
+    url(r'^bbs_detail/(?P<bbs_id>\d+)/$', views.BBS_detail_view.as_view(),name='bbs_detail'),
 
 ]

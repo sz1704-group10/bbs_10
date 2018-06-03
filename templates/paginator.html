@@ -1,0 +1,19 @@
+<div class="pagination-default clearfix">
+            {% if bbs_list.has_previous %}
+                <a href="{% url 'bbs_list' bbs_list.previous_page_number %}" class="pre pagination-item " title="上一页"><span
+                        >上一页</span></a>
+            {% endif %}
+                {% for p in page_range %}
+                    {% ifequal p bbs_list.number %}
+                        <span class="pagination-current">{{ p }}</span>
+                    {% else %}
+                        <a href="{% url 'bbs_list' p %}" class="pagination-item" title="第{{ p }}页">{{ p }}</a>
+                    {% endifequal %}
+                {% endfor %}
+            {% if bbs_list.has_next %}
+                <span class="page-points">...</span>
+
+                <a href="{% url 'bbs_list' paginator.num_pages %}" class="pagination-item ">{{ paginator.num_pages }}</a>
+                <a href="{% url 'bbs_list' bbs_list.next_page_number %}" title="下一页"><span class="next pagination-item">下一页</span></a>
+            {% endif %}
+</div>
