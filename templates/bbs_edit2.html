@@ -1,5 +1,6 @@
-<div id="tb_rich_poster_container" class="tb_rich_poster_container">
-<form id='bbs-form' action='/bbs_add/' method='post'>
+<div id="" class="tb_rich_poster_container">
+<form id='bbs-form' action='{% url 'bbs_edit' bbs.id %}' method='post'>
+{#    <input type="hidden" value="{{ bbs.id }}" name='bbs_id'>#}
     <div id="rich_ueditor_tpl">
         <div id="tb_rich_poster" class="tb_rich_poster">
             <div class="j_bubble_container"></div>
@@ -7,22 +8,9 @@
 
                         <div class="poster_head clearfix">
                 <div class="poster_head_text">
-
-                                            <a class="add_thread_btn post_head_btn cur" title="发表新贴" href="javascript:;"><span  class="post_head_btn_icon post_head_btn_icon_post"></span>发表新贴</a>
-
-
-
-
-                                                <a class="add_vote_btn post_head_btn" title="发起投票" target="_blank" href="/newvote/createvote?kw=%E7%8E%8B%E8%8F%8A&ie=utf-8"><span  class="post_head_btn_icon post_head_btn_icon_vote"></span>发起投票</a>
-
-
-
+                                            <a class="add_thread_btn post_head_btn cur" title="修改帖子" href="javascript:;"><span  class="post_head_btn_icon post_head_btn_icon_post"></span>修改帖子</a>
                 </div>
 
-                                <div class="poster_head_surveillance j_surveillance">
-                    发贴请遵守 <a href="/tb/eula.html" target="_blank" onclick="$.stats.track('post_agreement', 'poster')">贴吧协议及“七条底线”</a>
-					<a href="javascript:;" id="frs_footer_tieba_report" class="btn_tousu fr post_head_tousu" data-checkun="un">贴吧投诉</a>                    <button type="button" class="poster_disable_float j_disable_float" title="停止浮动">停止浮动</button>
-                </div>
             </div>
 
 
@@ -37,7 +25,7 @@
                                 <div class="poster_component title_container">
                     <div class="poster_title">标&nbsp;&nbsp;题:</div>
                     <div class="j_title_wrap">
-                        <input type="text" class="editor_textfield editor_title ui_textfield j_title j_topic_sug_input" name="title" autocomplete="off" />
+                        <input type="text" class="editor_textfield editor_title ui_textfield j_title j_topic_sug_input" name="title" autocomplete="off" value="{{ bbs.title }}" />
                         <span class="topic_add_btn j_topic_add_btn"></span>
                         <p class="fullscreen-word-limit"><span class="fullscreen-limit j-fullscreen-wl">0</span>/30</p>
                     </div>
@@ -48,7 +36,7 @@
                                 <div class="poster_component editor_content_wrapper ueditor_container">
                     <div class="poster_reply">内&nbsp;&nbsp;容:</div>
                     <div class="old_style_wrapper">
-                        <textarea style="width: 700px; height: 220px;" name='content'></textarea>
+                        <textarea style="width: 700px; height: 220px;" name='content'>{{ bbs.content }}</textarea>
                     </div>
                     <div class="poster_error j_error"></div>
                 </div>
@@ -56,7 +44,7 @@
 
                                 <div class="poster_component editor_bottom_panel clearfix">
                     <div class="j_floating">
-                        <input class="btn_default btn_middle" value='发表' type='submit' />
+                        <input class="btn_default btn_middle" value='修改' type='submit' />
                     </div>
                 </div>
             </div>

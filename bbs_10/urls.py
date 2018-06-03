@@ -27,11 +27,11 @@ urlpatterns = [
     # 增
     url(r'^bbs_add/$',views.BBS_add_view.as_view()),
     # 删
-    url(r'^bbs_del/$',views.BBS_del_view.as_view()),
+    url(r'^bbs_del/(?P<bbs_id>\d+)/$',views.BBS_del_view.as_view(),name='bbs_del'),
     # 改
-    url(r'^bbs_edit/$',views.BBS_edit_view.as_view()),
+    url(r'^bbs_edit/(?P<bbs_id>\d+)/$',views.BBS_edit_view.as_view(),name='bbs_edit'),
     # 搜索
-    url(r'^bbs_search/$',views.BBS_search_view.as_view()),
+    url(r'^bbs_search/$',views.BBS_search_view.as_view(),name='bbs_search'),
     # 详情
     url(r'^bbs_detail/$', views.BBS_detail_view.as_view()),
 

@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <!--STATUS OK-->
 <html>
+{% load staticfiles %}
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -77,16 +78,7 @@
 <div class="wrap1">
     <div class="wrap2">
 
-<div class="header">
-
-<script>
-if (window.alog && window.alog.fire) {
-    alog('speed.set', 'c_widget_search_show', +new Date);
-    alog.fire("mark");
-}
-</script>
-
-<div id="pagelet_search/pagelet/search_logic"></div><div id="pagelet_frs-header/pagelet/head"></div></div>
+{% include 'header.html' %}
 <div class="content" id="content">
     <div id="pagelet_frs-base/pagelet/content"></div></div>
 <div class="foot">
@@ -201,7 +193,7 @@ _.Module.use('frs-footer/pagelet/content_footer', [pagelet]);
    <div class="card_top clearfix">
               <div class="card_head">
            <a rel="noreferrer" href="/f?kw=%E7%8E%8B%E8%8F%8A&ie=utf-8">
-               <img class="card_head_img" id="forum-card-head" src="https://gss3.bdstatic.com/84oSdTum2Q5BphGlnYG/timg?wapp&amp;quality=80&amp;size=b150_150&amp;subsize=20480&amp;cut_x=0&amp;cut_w=0&amp;cut_y=0&amp;cut_h=0&amp;sec=1369815402&amp;srctrace&amp;di=0644c1ebc70eb9c8e71bedd31e4e71be&amp;wh_rate=null&amp;src=http%3A%2F%2Fimgsrc.baidu.com%2Fforum%2Fpic%2Fitem%2Fa0cbd709b3de9c82b043cf1a6081800a18d84397.jpg"/>
+               <img class="card_head_img" id="forum-card-head" src={% static 'logo.jpg' %}/>
            </a>
        </div>
 
@@ -333,73 +325,8 @@ _.Module.use('encourage-base/widget/global_notice', [{
 
 
 <a name="sub"></a>
-<div id="tb_rich_poster_container" class="tb_rich_poster_container">
-<form id='bbs-form' action='/bbs_add/' method='post'>
-    <div id="rich_ueditor_tpl">
-        <div id="tb_rich_poster" class="tb_rich_poster">
-            <div class="j_bubble_container"></div>
+{% include 'bbs_add.html' %}
 
-
-                        <div class="poster_head clearfix">
-                <div class="poster_head_text">
-
-                                            <a class="add_thread_btn post_head_btn cur" title="发表新贴" href="javascript:;"><span  class="post_head_btn_icon post_head_btn_icon_post"></span>发表新贴</a>
-
-
-
-
-                                                <a class="add_vote_btn post_head_btn" title="发起投票" target="_blank" href="/newvote/createvote?kw=%E7%8E%8B%E8%8F%8A&ie=utf-8"><span  class="post_head_btn_icon post_head_btn_icon_vote"></span>发起投票</a>
-
-
-
-                </div>
-
-                                <div class="poster_head_surveillance j_surveillance">
-                    发贴请遵守 <a href="/tb/eula.html" target="_blank" onclick="$.stats.track('post_agreement', 'poster')">贴吧协议及“七条底线”</a>
-					<a href="javascript:;" id="frs_footer_tieba_report" class="btn_tousu fr post_head_tousu" data-checkun="un">贴吧投诉</a>                    <button type="button" class="poster_disable_float j_disable_float" title="停止浮动">停止浮动</button>
-                </div>
-            </div>
-
-
-
-
-
-
-
-
-
-			<div class="poster_body editor_wrapper">
-                                <div class="poster_component title_container">
-                    <div class="poster_title">标&nbsp;&nbsp;题:</div>
-                    <div class="j_title_wrap">
-                        <input type="text" class="editor_textfield editor_title ui_textfield j_title j_topic_sug_input" name="title" autocomplete="off" />
-                        <span class="topic_add_btn j_topic_add_btn"></span>
-                        <p class="fullscreen-word-limit"><span class="fullscreen-limit j-fullscreen-wl">0</span>/30</p>
-                    </div>
-                    <div class="poster_error j_error"></div>
-                </div>
-
-
-                                <div class="poster_component editor_content_wrapper ueditor_container">
-                    <div class="poster_reply">内&nbsp;&nbsp;容:</div>
-                    <div class="old_style_wrapper">
-                        <textarea style="width: 700px; height: 220px;" name='content'></textarea>
-                    </div>
-                    <div class="poster_error j_error"></div>
-                </div>
-
-
-                                <div class="poster_component editor_bottom_panel clearfix">
-                    <div class="j_floating">
-                        <input class="btn_default btn_middle" value='发表' type='submit' />
-                    </div>
-                </div>
-            </div>
-                               </div>
-    </div>
-    {% csrf_token %}
-    </form>
-</div>
 --></code><script>Bigpipe.register("poster/pagelet/rich_poster", {"parent":"frs-footer\/pagelet\/content_footer","scripts":["\/tb\/_\/poster\/rich_poster_af27300.js","\/tb\/_\/placeholder_fd56d8e.js","\/tb\/_\/login_dialog_21db6a0.js","\/tb\/_\/show_dialog_d46d0a5.js","\/tb\/_\/sms_verify_dialog_cb7b503.js","\/tb\/_\/forbidden_ea6d3fd.js","\/tb\/_\/poster\/poster_context_d2dbaef.js","\/tb\/_\/snowflow_6f0903a.js","\/tb\/_\/tdou_open_type_a72e1ed.js","\/tb\/_\/user_api_10e048c.js","\/tb\/_\/icons_da74e35.js","\/tb\/_\/base_user_data_7bf9fa5.js","\/tb\/_\/base_dialog_user_bar_2f6ce60.js","\/tb\/_\/qianbao_cashier_dialog_d2816b6.js","\/tb\/_\/qianbao_purchase_member_14b7582.js","\/tb\/_\/messenger_c93e9bb.js","\/tb\/_\/cashier_dialog_d52cf7c.js","\/tb\/_\/pay_member_c57f92d.js","\/tb\/_\/poster\/post_signature_29deca7.js","\/tb\/_\/poster\/mouse_pwd_b9b45b5.js","\/tb\/_\/tbcopy_0deb361.js","\/tb\/_\/tbshare_share_f216378.js","\/tb\/_\/poster\/share_thread_c8aa28c.js","\/tb\/_\/poster\/bsk_service_c6680a4.js","\/tb\/_\/poster\/params_xss_handler_2083372.js","\/tb\/_\/rsa_safe_299a966.js","\/tb\/_\/paykey_safe_payment_37d2c7b.js","\/tb\/_\/captcha_57d747c.js","\/tb\/_\/captcha_dialog_ceaacd2.js","\/tb\/_\/captcha_safe_payment_7f700b4.js","\/tb\/_\/mobile_safe_payment_5c23e71.js","\/tb\/_\/tbean_safe_3668241.js","\/tb\/_\/qianbao_purchase_tdou_fb8a62f.js","\/tb\/_\/payment_dialog_title_2b9be39.js","\/tb\/_\/tdou_get_769931a.js","\/tb\/_\/tbean_safe_ajax_5dbae2e.js","\/tb\/_\/tdou_data_747c462.js","\/tb\/_\/umoney_1379f71.js","\/tb\/_\/tdou_template_8d6b3f6.js","\/tb\/_\/tdou_builder_05101dd.js","\/tb\/_\/tdou_view_operation_bootstrap_7f5fd6b.js","\/tb\/_\/tdou_view_cashier_6afe462.js","\/tb\/_\/tdou_view_util_d282db0.js","\/tb\/_\/tdou_view_auto_redirect_c5d928c.js","\/tb\/_\/umoney_query_e6ef23a.js","\/tb\/_\/tdou_view_check_f11908d.js","\/tb\/_\/tdou_counter_cbe5c8a.js","\/tb\/_\/tdou_view_fec0b7b.js","\/tb\/_\/tdou_3289666.js","\/tb\/_\/tcharge_dialog_1cd4f09.js","\/tb\/_\/tool_696c6e8.js","\/tb\/_\/loader_12d7714.js","\/tb\/_\/tpl_async_15_395293f.js","\/tb\/_\/loader_630632a.js","\/tb\/_\/like_tip_4f71dda.js","\/tb\/_\/poster\/post_service_4032c7d.js","\/tb\/_\/poster\/topic_suggestion_4827396.js","\/tb\/_\/poster\/post_prefix_50ae20e.js","\/tb\/_\/word_limit_47b28de.js","\/tb\/_\/poster\/post_manager_968b3bd.js","\/tb\/_\/complaint_bar_owner_5356b96.js","\/tb\/_\/bubble_tip_8091dc2.js","\/tb\/_\/poster\/rich_poster_4c498f1.js","\/tb\/_\/ueditor_base_634b3f5.js","\/tb\/_\/ueditor_extend_base_29960fa.js","\/tb\/_\/background_5c34c50.js","\/tb\/_\/auto_link_e48bd2b.js","\/tb\/_\/tb_gram_a17c017.js","\/tb\/_\/slide_select_cdc6bf0.js","\/tb\/_\/image_flash_editor_96f9f79.js","\/tb\/_\/scroll_panel_0150f9a.js","\/tb\/_\/image_exif_285bafe.js","\/tb\/_\/image_uploader_3de9609.js","\/tb\/_\/image_uploader_manager_5464722.js","\/tb\/_\/picture_uploader_3ea0841.js","\/tb\/_\/picture_selector_1ef91ec.js","\/tb\/_\/picture_web_selector_0035b16.js","\/tb\/_\/picture_214d3ba.js","\/tb\/_\/custom_emotion_24326d5.js","\/tb\/_\/ueditor_emotion_ad18456.js","\/tb\/_\/emotion_4add196.js","\/tb\/_\/ueditor_video_28e14c1.js","\/tb\/_\/video_1d31e34.js","\/tb\/_\/sketchpad_0ea952f.js","\/tb\/_\/scrawl_0005979.js","\/tb\/_\/jquery_caret_a83afb9.js","\/tb\/_\/ueditor_topic_e81e6a5.js","\/tb\/_\/topic_09c6508.js","\/tb\/_\/topic_suggestion_9bb3805.js","\/tb\/_\/fullscreen_9b3dd34.js","\/tb\/_\/height_limit_e4b1ffa.js","\/tb\/_\/draft_91a3223.js","\/tb\/_\/at_68fdde7.js","\/tb\/_\/counter_d482e1c.js","\/tb\/_\/word_limit_0f6ca1b.js","\/tb\/_\/join_vip_dialog_9242ef7.js","\/tb\/_\/props_data_2514f70.js","\/tb\/_\/bubble_factory_279ffe5.js","\/tb\/_\/post_setting_0ce6f36.js","\/tb\/_\/setting_f184c24.js","\/tb\/_\/pay_util_e0a3684.js","\/tb\/_\/medal_549f6f1.js","\/tb\/_\/paypost_data_70c1ba1.js","\/tb\/_\/paypost_agree_dialog_a4c48b3.js","\/tb\/_\/paypost_editor_7d000d4.js","\/tb\/_\/paypost_867d76a.js"],"styles":["\/tb\/_\/poster\/rich_poster_20b1f62.css","\/tb\/_\/placeholder_7eb7ce6.css","\/tb\/_\/login_dialog_cc7c082.css","\/tb\/_\/sms_verify_dialog_cd843b0.css","\/tb\/_\/forbidden_752e552.css","\/tb\/_\/snowflow_45a89bb.css","\/tb\/_\/icons_4bd55ce.css","\/tb\/_\/base_user_data_f665ab7.css","\/tb\/_\/base_dialog_user_bar_da68a26.css","\/tb\/_\/qianbao_cashier_dialog_5bb986a.css","\/tb\/_\/qianbao_purchase_member_d190d50.css","\/tb\/_\/cashier_dialog_0390325.css","\/tb\/_\/pay_member_d41d8cd.css","\/tb\/_\/tbshare_share_99dc1ff.css","\/tb\/_\/poster\/share_thread_cbacfa9.css","\/tb\/_\/paykey_safe_payment_8f2a8db.css","\/tb\/_\/captcha_8dce960.css","\/tb\/_\/captcha_safe_payment_d41d8cd.css","\/tb\/_\/mobile_safe_payment_8c5a3b9.css","\/tb\/_\/tbean_safe_3c779a3.css","\/tb\/_\/qianbao_purchase_tdou_4b31f54.css","\/tb\/_\/payment_dialog_title_b2f2a75.css","\/tb\/_\/tdou_get_d9bbf1a.css","\/tb\/_\/tbean_safe_ajax_d41d8cd.css","\/tb\/_\/umoney_f12b09a.css","\/tb\/_\/tdou_template_f7dd2ac.css","\/tb\/_\/umoney_query_b5c3dca.css","\/tb\/_\/tdou_d41d8cd.css","\/tb\/_\/like_tip_65eb23b.css","\/tb\/_\/poster\/topic_suggestion_f8eb4d2.css","\/tb\/_\/word_limit_3c5481d.css","\/tb\/_\/complaint_bar_owner_a993083.css","\/tb\/_\/bubble_tip_8f22754.css","\/tb\/_\/poster\/rich_poster_681aa2c.css","\/tb\/_\/ueditor_base_1d8237b.css","\/tb\/_\/ueditor_extend_base_d41d8cd.css","\/tb\/_\/background_c5ba91f.css","\/tb\/_\/tb_gram_d41d8cd.css","\/tb\/_\/slide_select_9a5a934.css","\/tb\/_\/image_flash_editor_8f43e09.css","\/tb\/_\/scroll_panel_eb74727.css","\/tb\/_\/picture_uploader_410491b.css","\/tb\/_\/picture_web_selector_e779653.css","\/tb\/_\/picture_ccc8af7.css","\/tb\/_\/custom_emotion_2d0490a.css","\/tb\/_\/ueditor_emotion_a5eeac8.css","\/tb\/_\/ueditor_video_1453a78.css","\/tb\/_\/sketchpad_fad481d.css","\/tb\/_\/scrawl_5840a35.css","\/tb\/_\/ueditor_topic_bb19767.css","\/tb\/_\/topic_suggestion_3234253.css","\/tb\/_\/fullscreen_a139ec1.css","\/tb\/_\/at_d03b8c9.css","\/tb\/_\/post_setting_46ea748.css","\/tb\/_\/setting_ca19f87.css","\/tb\/_\/medal_5022a4b.css","\/tb\/_\/paypost_agree_dialog_fd57709.css","\/tb\/_\/paypost_editor_6d704da.css"]}).then(function(pagelet){if (!window.PosterContext) {
 _.Module.use('poster/widget/poster_context', [{
     blockInfo: {
@@ -809,9 +736,9 @@ _.Module.use("poster/widget/rich_poster", {
 </li>                                <li class=" j_tbnav_tab " data-tab-group>
     <a href="/f?kw=%E7%8E%8B%E8%8F%8A&ie=utf-8&tab=group" class="j_nav_local_tab_link j_tbnav_tab_a" stats-data="fr=tb0_forum&st_mod=frs&st_value=tabgroup">群组</a>
 </li>            </ul>
-                            <form class="search_internal_wrap pull_right j_search_internal_forum">
-                <input class="search_internal_input j_search_internal_input" value="" placeholder="吧内搜索" type="text"/>
-                <button class="search_internal_btn" type="submit"/>
+                            <form class="search_internal_wrap pull_right" action='/bbs_search/' method='get'>
+                <input class="search_internal_input" value="" placeholder="吧内搜索" type="text" name='key'/>
+                <button class="search_internal_btn" type='submit'/>
                 <i></i></button>
             </form>
             </div>
@@ -1099,12 +1026,17 @@ _.Module.use("poster/widget/rich_poster", {
                 <div class="threadlist_title pull_left j_th_tit ">
 
 
-    <a rel="noreferrer"  href="/p/5726501917" title="{{ bbs.content }}" target="_blank" class="j_th_tit ">{{ bbs.content }}</a>
+    <a rel="noreferrer"  href="/p/5726501917" title="{{ bbs.title }}" target="_blank" class="j_th_tit ">{{ bbs.title }}</a>
 </div><div class="threadlist_author pull_right">
     <span class="tb_icon_author "
           title="主题作者: {{ bbs.user.name }}"
-          data-field='{&quot;user_id&quot;:938517228}' ><i class="icon_author"></i><span class="frs-author-name-wrap"><a rel="noreferrer"  data-field='{&quot;un&quot;:&quot;\u5343\u5e74\u8001\u50e7\u52a8\u6625\u5fc3&quot;}' class="frs-author-name j_user_card " href="/home/main/?un=%E5%8D%83%E5%B9%B4%E8%80%81%E5%83%A7%E5%8A%A8%E6%98%A5%E5%BF%83&ie=utf-8&fr=frs" target="_blank">{{ bbs.user.name }}</a></span><span class="icon_wrap  icon_wrap_theme1 frs_bright_icons "><a style="background: url(//tb1.bdstatic.com/tb/cms/com/icon/104_14.png?stamp=1525429197) no-repeat -3800px  0;top:0px;left:0px" data-slot="1"  data-name="starmaster" data-field='{&quot;name&quot;:&quot;starmaster&quot;,&quot;end_time&quot;:&quot;1735660800&quot;,&quot;category_id&quot;:104,&quot;slot_no&quot;:&quot;1&quot;,&quot;title&quot;:&quot;\u624b\u6e380\u661f\u8fbe\u4eba&quot;,&quot;intro&quot;:&quot;\u5728\u624b\u6e38\u73a9\u5bb6\u5427\u6210\u4e3a\u624b\u6e380\u661f\u8fbe\u4eba\u8ba4\u8bc1\u7528\u6237\uff0c\u5373\u53ef\u83b7\u53d6\u54e6~&quot;,&quot;intro_url&quot;:&quot;https:\/\/tieba.baidu.com\/f?kw=\u73a9\u5bb6\u8ba4\u8bc1&amp;ie=utf-8&quot;,&quot;price&quot;:0,&quot;value&quot;:&quot;1&quot;,&quot;sprite&quot;:{&quot;1&quot;:&quot;1525429197,76&quot;,&quot;2&quot;:&quot;1525429197,77&quot;,&quot;3&quot;:&quot;1525429197,78&quot;,&quot;4&quot;:&quot;1525429197,79&quot;,&quot;5&quot;:&quot;1525429197,80&quot;,&quot;6&quot;:&quot;1525429197,81&quot;}}' target="_blank"   href="https://tieba.baidu.com/f?kw=玩家认证&amp;ie=utf-8"  class="j_icon_slot"  title="手游0星达人"  locate="starmaster_1#icon"  style="top: 0px; left:0px">  <div class=" j_icon_slot_refresh"></div></a></span>    </span>
-    <span class="pull-right is_show_create_time" title="创建时间">{{ bbs.add_time }}</span>
+          data-field='{&quot;user_id&quot;:938517228}' >
+          <i class="icon_author"></i>
+          <span class="frs-author-name-wrap"><a target="_blank">{{ bbs.user.name }}</a></span>
+
+          <span><a href='{% url 'bbs_del' bbs.id %}'>删除</a></span>
+          <span><a href='{% url 'bbs_edit' bbs.id %}'>修改</a></span>
+          <span class="pull-right" title="创建时间" style='font-size:12px;'>{{ bbs.add_time }}</span>
 </div>
             </div>
                             <div class="threadlist_detail clearfix">
