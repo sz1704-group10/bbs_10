@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 
 # 刘学
 from django.views import View
+
+from app.models import BBS, User
 
 
 class BBS_del_view(View):
@@ -11,8 +13,12 @@ class BBS_del_view(View):
 
 # 刘学
 class BBS_add_view(View):
-    def get(self, request):
-        return render(request, 'bbs_add.html', {})
+    def post(self, request):
+        title = request.POST.get('title','')
+        content = request.POST.get('content','')
+        bbs = BBS(title=title,content=content,user_id=1)
+        bbs.save()
+        return redirect('/bbs_list/')
 
 # 卫星
 class BBS_edit_view(View):
@@ -22,7 +28,10 @@ class BBS_edit_view(View):
 # 熊文强
 class BBS_list_view(View):
     def get(self,request):
-        return render(request,'bbs_list.html',{})
+        bbs_list = BBS.objects.order_by('-add_time')
+        for bbs in bbs_list:
+            bbs.user = bbs.getUser()
+        return render(request,'bbs_list.html',{'bbs_list':bbs_list})
 
 # 熊文强
 class BBS_search_view(View):
