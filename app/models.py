@@ -13,5 +13,14 @@ class BBS(models.Model):
         return user
 
 class User(models.Model):
+    SEX = (
+        ('1','男'),
+        ('2','女'),
+        ('3','保密'),
+    )
     name = models.CharField(max_length=32)
+    password = models.CharField(max_length=128,default='')
+    images = models.ImageField(upload_to='icon/',max_length=128,default='icon/default.jpeg')
+    sex = models.CharField(choices=SEX,max_length=32,default='1')
+    age = models.IntegerField(default=0)
     add_time = models.DateTimeField(default=datetime.now)

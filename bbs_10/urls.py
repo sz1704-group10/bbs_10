@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.views.static import serve
 
 from app import views
+from bbs_10 import settings
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -34,5 +36,14 @@ urlpatterns = [
     url(r'^bbs_search/(?P<page>\d+)/$',views.BBS_search_view.as_view(),name='bbs_search'),
     # 详情
     url(r'^bbs_detail/(?P<bbs_id>\d+)/$', views.BBS_detail_view.as_view(),name='bbs_detail'),
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+
+    # 注册
+    url(r'^register/$',views.BBS_Register_view.as_view(),name='register'),
+    # 登录
+    url(r'^login/$',views.BBS_Login_view.as_view(),name='login'),
+    #退出
+    url(r'^logout/$',views.BBS_Logout_view.as_view(),name='logout'),
+
 
 ]

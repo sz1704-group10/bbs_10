@@ -1,0 +1,13 @@
+<div class="search_top clearfix" style="margin-bottom: 0">
+    {% if not request.session.user %}
+        <div class="search_nav j_search_nav" style="margin-right: 350px;">
+            <a rel="noreferrer" param="wd" href="/login/">登录</a>
+            <a rel="noreferrer" param="word" href="/register/">注册</a>
+        </div>
+        {% else %}
+        <div class="search_nav j_search_nav" style="margin-right: 350px;">
+            <a rel="noreferrer" param="wd" href="/logout/">退出</a>
+            <a rel="noreferrer" param="wd">{{ request.session.user }}</a>
+        </div>
+    {% endif %}
+    </div>
